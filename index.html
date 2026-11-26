@@ -58,7 +58,7 @@ section{transition:transform .6s,filter .6s}
 .sec-h b{font-size:17px;letter-spacing:-.04em}
 .code{font-size:12px;color:var(--soft);white-space:nowrap}
 .code.side{color:var(--amber);font-weight:500}
-.narr{font-size:12.5px;line-height:1.65;color:#a39d82;margin:4px 0 6px;word-break:keep-all;min-height:1em}
+.narr{font-size:12.5px;line-height:1.65;color:#a39d82;margin:4px 0 0;word-break:keep-all;min-height:1em}
 .who{display:inline-flex;gap:4px;vertical-align:middle}
 .who i{width:10px;height:10px;border-radius:50%;background:var(--c)}
 .it{display:flex;align-items:center;gap:8px;min-height:36px;padding:1px 0}
@@ -68,14 +68,14 @@ section{transition:transform .6s,filter .6s}
 .ck::before{content:"";width:16px;height:16px;border-radius:4px;border:1.5px solid #cbc3a2;transition:background .12s,border-color .12s}
 .ck[aria-pressed=true]::before{background:var(--c);border-color:var(--c)}
 .ck:focus-visible{outline:2px solid var(--ink);outline-offset:-6px;border-radius:6px}
-.here{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}
+.here-row{display:flex;align-items:flex-end;gap:10px;margin:16px 0 4px}
+.here{flex:1;display:flex;flex-wrap:wrap;gap:6px}
 .chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px 0 8px;border-radius:99px;font-size:12.5px;font-weight:500;background:var(--tint);color:#5d5946}
 .chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
 .chip.now{background:var(--c);color:#fff}
 .chip.now i{background:#fff;opacity:.85}
 .chip small{font-size:11px;font-weight:400;opacity:.85}
-.colh{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
-.colh span{flex:1}
+.colh{flex:none;display:flex;gap:8px;padding-bottom:1px}
 .colh b{width:30px;text-align:center;font-size:10.5px;font-weight:700;color:var(--c);white-space:nowrap;overflow:hidden;letter-spacing:-.04em}
 /* 불 꺼진 층: 구역 자체는 어둡게, 누군가 그 층에 있는 동안은 화면 전체 소등 */
 section[data-lv=DARK]{position:relative;z-index:6;background:#14130f;color:#dcd6c0;margin:0 calc(-1 * clamp(20px,6vw,42px));padding:2px clamp(20px,6vw,42px) 20px;transition:background 1.2s}
@@ -109,6 +109,8 @@ section[data-lv=DARK] .need{color:#8a846e}
 .dock button,.ov-bar button{min-height:46px;padding:0 16px;border-radius:10px;border:0;background:transparent;cursor:pointer;font-weight:500;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
 .dock button:not(.go):hover,.ov-bar button:not(.go):hover{background:var(--tint)}
 .dock .go,.ov-bar .go{background:var(--ink);color:var(--paper);font-weight:700;flex:1}
+.dock .warn{background:#f3e0da;color:var(--red)}
+@media(max-width:420px){.dock button svg{display:none}.dock button{padding:0 12px}}
 .go small{font-weight:400;font-size:12px;opacity:.6}
 .ov-bar{background:rgba(252,250,241,.94);padding:6px;border-radius:14px;box-shadow:0 0 0 1px rgba(60,50,10,.08),0 12px 30px -12px rgba(60,50,10,.45)}
 button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -199,7 +201,7 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
  </div>
 </div>
 <div id="lo" aria-hidden="true" data-html2canvas-ignore></div>
-<div class="dock" data-html2canvas-ignore><button id="saveMain"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>이미지 저장</button><button class="go" id="openRes">결과 보기</button></div>
+<div class="dock" data-html2canvas-ignore><button id="resetAll" aria-label="처음부터 다시하기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg><span>다시하기</span></button><button id="saveMain"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>이미지 저장</button><button class="go" id="openRes">결과 보기</button></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 {
@@ -458,8 +460,8 @@ function zoneHTML(lv,here,tr){const L=ALL[lv],isSide=!!SIDES[lv],isNew=seen.size
  const waiting=here.filter(o=>!isSide&&!tr[o.i].done&&tr[o.i].path[tr[o.i].path.length-1]===lv);
  return`<section class="${isNew?'new':''}" data-lv="${lv}"><div class="cut"></div><div class="sec-h"><b>${L.name}</b><span class="code ${isSide?'side':''}">${L.code}${isSide?' · 선택':''}</span></div>
  <p class="narr">${L.narr}</p>
- <div class="here">${here.map(o=>{const t=tr[o.i],now=!isSide&&!t.done&&t.path[t.path.length-1]===lv;return`<span class="chip${now?' now':''}" style="--c:${okC(o.c.color)}"><i></i>${esc(nameOf(o.c,o.i))}</span>`}).join('')}</div>
- <div class="colh" aria-hidden="true"><span></span>${here.map(o=>`<b style="--c:${okC(o.c.color)}">${esc([...nameOf(o.c,o.i)].slice(0,2).join(''))}</b>`).join('')}</div>
+ <div class="here-row"><div class="here">${here.map(o=>{const t=tr[o.i],now=!isSide&&!t.done&&t.path[t.path.length-1]===lv;return`<span class="chip${now?' now':''}" style="--c:${okC(o.c.color)}"><i></i>${esc(nameOf(o.c,o.i))}</span>`}).join('')}</div>
+ <div class="colh" aria-hidden="true">${here.map(o=>`<b style="--c:${okC(o.c.color)}">${esc([...nameOf(o.c,o.i)].slice(0,2).join(''))}</b>`).join('')}</div></div>
  ${L.items.map((it,k)=>`<div class="it"><span class="tx">${it[0]}</span><i class="lead"></i>${here.map(({c,i})=>`<button class="ck" style="--c:${okC(c.color)}" data-c="${c.id}" data-lv="${lv}" data-k="${k}" aria-pressed="${ck(c.id,lv).includes(k)}" aria-label="${esc(nameOf(c,i))}: ${esc(it[0])}"></button>`).join('')}</div>`).join('')}
  ${waiting.length?`<div class="need">${waiting.map(o=>`<span class="who"><i style="--c:${okC(o.c.color)}"></i></span> ${esc(nameOf(o.c,o.i))} ${tr[o.i].need}개 더`).join(' &nbsp; ')}</div>`:''}
  ${isSide?'<div class="need">샛길은 체크하지 않아도 계속 진행돼요</div>':''}</section>`}
@@ -590,6 +592,10 @@ function toast(t){const d=document.createElement('div');d.className='toast';d.se
 try{const c=document.createElement('canvas');c.width=44;c.height=8;const g=c.getContext('2d');g.fillStyle='#d6c98c';g.fillRect(0,0,44,8);g.fillStyle='rgba(120,100,30,.07)';g.fillRect(0,0,2,8);g.fillStyle='rgba(120,100,30,.05)';g.fillRect(22,0,1,8);
  const u=`url(${c.toDataURL()})`;document.body.style.backgroundImage=u;document.documentElement.style.setProperty('--wallimg',u)}catch(e){}
 $('openRes').onclick=openResult;
+{const r=$('resetAll'),lab=r.querySelector('span');let armed=0,tm;
+ r.onclick=()=>{if(!Object.keys(st.checks).length){toast('아직 체크한 항목이 없어요');return}
+  if(!armed){armed=1;lab.textContent='정말 지울까요?';r.classList.add('warn');tm=setTimeout(()=>{armed=0;lab.textContent='다시하기';r.classList.remove('warn')},3000);return}
+  clearTimeout(tm);armed=0;lab.textContent='다시하기';r.classList.remove('warn');st.checks={};save();seen=new Set();renderBody();window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'});toast('처음부터 다시 시작해요. 탐험자는 그대로예요')}}
 $('saveMain').onclick=e=>shootFull(e.currentTarget,null,'일지');
 renderAll();
 if(window.claude&&claude.use)claude.use('downloads').then(d=>{dl=d}).catch(()=>{});
