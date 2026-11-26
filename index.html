@@ -143,6 +143,15 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .res-who>span{display:flex;align-items:center;gap:10px;font-weight:700}
 .res-who img,.res-who .noimg{width:38px;height:38px;border-radius:6px;object-fit:cover;background:var(--tint);flex:none}
 .res-who em{font-style:normal;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:99px;border:1.5px solid currentColor}
+.meter{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;background:var(--tint);border-radius:8px;font-size:12px}
+.meter b{font-size:13px;font-weight:700;min-width:1.6em;color:var(--ink)}
+.meter .mb{flex:1;max-width:160px;height:5px;border-radius:3px;background:#e3dbb8;overflow:hidden}
+.meter .mb i{display:block;height:100%;background:var(--c);border-radius:3px}
+.ml{color:var(--soft);white-space:nowrap}
+.meter .ml+.mb{margin-left:2px}
+.meter b+.ml{margin-left:10px}
+.route{display:flex;gap:10px;margin-top:8px;font-size:12.5px;color:#6d6853;line-height:1.6;word-break:keep-all}
+.route .ml{flex:none}
 .res-t{position:relative;font-size:19px;font-weight:700;letter-spacing:-.045em;margin-top:12px}
 .res-t .c{display:inline-block;white-space:pre}
 .res-p{margin:4px 0 0;font-size:13.5px;line-height:1.7;color:#5d5a4a;word-break:keep-all}
@@ -157,14 +166,23 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @keyframes flip{from{opacity:0;transform:rotateX(90deg)}}
 @keyframes type{0%{opacity:0}100%{opacity:1}}
 @keyframes gather{from{opacity:0;transform:translateX(calc(var(--o) * 7px))}}
-@keyframes squeeze{0%{opacity:0;transform:translateX(calc(var(--o) * 7px))}60%{opacity:1;transform:none}100%{transform:translateX(calc(var(--o) * -2px))}}
-@keyframes wall{0%{opacity:0}35%{opacity:1;color:var(--ink)}100%{color:#b3a256}}
+@keyframes squeeze{0%{opacity:0;transform:translateX(calc(var(--o) * 7px))}55%{opacity:1;transform:none}75%{transform:translateX(calc(var(--o) * -2.5px))}100%{transform:none}}
+@keyframes wall{0%{opacity:0}30%{opacity:1;color:var(--ink)}65%{color:#c2b067}100%{color:#6e5f26}}
 @keyframes sink{0%{opacity:0;filter:blur(6px);transform:translateY(6px)}60%{opacity:.7;filter:blur(2px)}100%{opacity:1;filter:none}}
 @keyframes blind{from{opacity:0;filter:blur(5px)}}
 @keyframes smear{from{opacity:0;transform:scaleX(2.4);filter:blur(3px);color:#c9b866}}
 @keyframes walk{0%{opacity:0}35%{opacity:1;transform:none}65%{opacity:.4;transform:translateX(12px)}100%{opacity:1;transform:none}}
 @keyframes knock{0%,30%,60%,100%{transform:none}8%,38%,68%{transform:translateX(-3px)}16%,46%,76%{transform:translateX(3px)}}
-.e-knock.play-t .res-t{animation:knock 1.6s calc(var(--d) + 1s) both}
+.e-knock.play-t .meter{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;background:var(--tint);border-radius:8px;font-size:12px}
+.meter b{font-size:13px;font-weight:700;min-width:1.6em;color:var(--ink)}
+.meter .mb{flex:1;max-width:160px;height:5px;border-radius:3px;background:#e3dbb8;overflow:hidden}
+.meter .mb i{display:block;height:100%;background:var(--c);border-radius:3px}
+.ml{color:var(--soft);white-space:nowrap}
+.meter .ml+.mb{margin-left:2px}
+.meter b+.ml{margin-left:10px}
+.route{display:flex;gap:10px;margin-top:8px;font-size:12.5px;color:#6d6853;line-height:1.6;word-break:keep-all}
+.route .ml{flex:none}
+.res-t{animation:knock 1.6s calc(var(--d) + 1s) both}
 .res-t[data-ghost]::after{content:attr(data-ghost);position:absolute;left:0;top:0;color:var(--red);opacity:0;pointer-events:none}
 .play .res-t[data-ghost]::after{animation:ghost 3.2s calc(var(--d) + .8s) both}
 @keyframes ghost{0%{opacity:0;transform:none}20%{opacity:.4;transform:translate(3px,1px)}60%{opacity:.25;transform:translate(1px,0)}100%{opacity:0;transform:none}}
@@ -608,11 +626,12 @@ function resultHTML(o){const {tr,n,rows,fin,ok,kind}=o,hm=fin.some(r=>r.e.cls===
  const h=hash(JSON.stringify(st.checks)+st.chars.map(c=>c.name).join());let d=0;const step=()=>(d+=.35).toFixed(2)+'s';
  return`<div class="tube" aria-hidden="true"></div><div class="paper"><div class="rrow" style="--d:0s"><div class="head"><div class="meta">탐사 정산서 · No. ${h%9000+1000}</div><h2>${H[0]}</h2><div class="meta">${H[1]}</div></div></div>
  ${rows.map(({c,i,t,e})=>{const k=e?e.key:'',a=ANIM[k]||['rise','.5s'],dd=step();return`<div class="rrow e-${k}" style="--d:${dd};--a:${a[0]};--t:${a[1]}"><div class="cut"></div>
-  <div class="res-who"><span>${okP(c.photo)?`<img src="${c.photo}" alt="">`:'<i class="noimg"></i>'}<i style="width:12px;height:12px;border-radius:50%;background:${okC(c.color)};flex:none"></i>${esc(nameOf(c,i))}</span>
+  <div class="res-who"><span>${okP(c.photo)?`<img src="${c.photo}" alt="">`:''}<i style="width:12px;height:12px;border-radius:50%;background:${okC(c.color)};flex:none"></i>${esc(nameOf(c,i))}</span>
   <em style="color:${e?(e.cls==='ok'?'var(--ok)':e.cls==='no'?'var(--red)':'var(--amber)'):'var(--soft)'}">${e?e.label:'탐사 중'}</em></div>
   <div class="res-t" data-key="${k}" data-full="${esc(e?e.title:'')}" ${e&&e.cls==='hm'?`data-ghost="${esc(e.title)}"`:''}>${e?titleHTML(e.title,k):esc(LV[t.path[t.path.length-1]].name)+'에서 헤매는 중'}</div>
   <p class="res-p">${e?e.desc:`${t.need}개 더 체크하면 다음 구역으로 갑니다.`}</p>
-  <div class="row2" style="margin-top:8px"><span>${t.path.filter(l=>!['WALK','FORK'].includes(l)).map(l=>LV[l].name).join(' → ')}${e?' → '+(e.cls==='no'?'출구 없음':'출구'):''}</span><span class="nw">정신력 ${(e?e.s:stats(c.id,t.path)).san}</span></div></div>`}).join('')}
+  ${(()=>{const S=e?e.s:stats(c.id,t.path);return`<div class="meter" style="--c:${okC(c.color)}"><span class="ml">정신력</span><span class="mb"><i style="width:${S.san}%"></i></span><b>${S.san}</b><span class="ml">체크</span><b>${S.n}</b></div>`})()}
+  <div class="route"><span class="ml">경로</span><span>${t.path.filter(l=>!['WALK','FORK'].includes(l)).map(l=>LV[l].name).join(' → ')}${e?' → '+(e.cls==='no'?'출구 없음':'출구'):''}</span></div></div>`}).join('')}
  <div class="rrow" style="--d:${step()}"><div class="solid"></div><div class="row2 b"><span>귀환 인원</span><span>${ok} / ${n}</span></div>
  ${story?`<div class="row2 kv"><span>동행 기록</span><span>${story}</span></div>`:''}
  <div class="row2 kv"><span>총 체류 시간</span><span>${h%60+12}시간${fin.length&&ok<n?' + ∞':''}</span></div>
