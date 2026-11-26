@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMxMjExMGQiLz48cmVjdCB4PSIyMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjMiIGZpbGw9IiMzYTM1MjQiLz48Y2lyY2xlIGN4PSIyNCIgY3k9IjI4IiByPSIyLjYiIGZpbGw9IiNmNGYwZDgiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjI4IiByPSIyLjYiIGZpbGw9IiNmNGYwZDgiLz48cGF0aCBkPSJNMjEgMzhxMTEgOSAyMiAwIiBzdHJva2U9IiNmNGYwZDgiIHN0cm9rZS13aWR0aD0iMi42IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* VOICE: 무표정한 영수증 말투로 적힌 괴담. 결말에서만 살짝 웃긴다
    IDEA: 노란 방 형광등 아래에서 출력되는 탐사 영수증. 체크할수록 아래로 계속 인쇄된다
@@ -78,8 +78,9 @@ section{transition:transform .6s,filter .6s}
 .colh{flex:none;display:flex;gap:8px;padding-bottom:1px}
 .colh b{width:30px;text-align:center;font-size:10.5px;font-weight:700;color:var(--c);white-space:nowrap;overflow:hidden;letter-spacing:-.04em}
 /* 불 꺼진 층: 구역 자체는 어둡게, 누군가 그 층에 있는 동안은 화면 전체 소등 */
-section[data-lv=DARK]{position:relative;z-index:6;background:#14130f;color:#dcd6c0;margin:0 calc(-1 * clamp(20px,6vw,42px));padding:2px clamp(20px,6vw,42px) 20px;transition:background 1.2s}
-section[data-lv=DARK] .cut{border-color:#14130f}
+section[data-lv=DARK]{position:relative;z-index:6;color:#dcd6c0;margin:0 calc(-1 * clamp(20px,6vw,42px));padding:70px clamp(20px,6vw,42px) 80px;background:linear-gradient(rgba(20,19,15,0) 0,#14130f 64px,#14130f calc(100% - 70px),rgba(20,19,15,0) 100%)}
+section[data-lv=DARK] .cut{display:none}
+section[data-lv=DARK]+.ev{margin-top:0}
 section[data-lv=DARK] .narr{color:#8a846e}
 section[data-lv=DARK] .code{color:#7d7762}
 section[data-lv=DARK] .lead{border-color:#3a372c}
@@ -105,12 +106,14 @@ section[data-lv=DARK] .need{color:#8a846e}
 .new{animation:print .5s ease-out both}
 @keyframes print{from{opacity:0;transform:translateY(-8px)}}
 .hint{font-size:12.5px;color:var(--soft);text-align:center;margin:10px 0 0}
-.dock{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 32px),420px);display:flex;gap:6px;padding:6px;background:rgba(252,250,241,.94);border-radius:14px;box-shadow:0 0 0 1px rgba(60,50,10,.08),0 12px 30px -12px rgba(60,50,10,.45);z-index:5;backdrop-filter:blur(6px)}
+.dock{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 32px),580px);display:flex;gap:4px;padding:6px;background:rgba(252,250,241,.94);border-radius:14px;box-shadow:0 0 0 1px rgba(60,50,10,.08),0 12px 30px -12px rgba(60,50,10,.45);z-index:7;backdrop-filter:blur(6px)}
 .dock button,.ov-bar button{min-height:46px;padding:0 16px;border-radius:10px;border:0;background:transparent;cursor:pointer;font-weight:500;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
 .dock button:not(.go):hover,.ov-bar button:not(.go):hover{background:var(--tint)}
 .dock .go,.ov-bar .go{background:var(--ink);color:var(--paper);font-weight:700;flex:1}
 .dock .warn{background:#f3e0da;color:var(--red)}
-@media(max-width:420px){.dock button svg{display:none}.dock button{padding:0 12px}}
+@media(max-width:600px){.dock button:not(.go):not(.warn) span,.ov-bar #capRes span{display:none}.dock button:not(.go),.ov-bar button:not(.go){padding:0 13px}.dock .warn svg{display:none}}
+#sndBtn[aria-pressed=false] .sw-on,#sndBtn[aria-pressed=true] .sw-off{display:none}
+#sndBtn[aria-pressed=false]{color:var(--soft)}
 .go small{font-weight:400;font-size:12px;opacity:.6}
 .ov-bar{background:rgba(252,250,241,.94);padding:6px;border-radius:14px;box-shadow:0 0 0 1px rgba(60,50,10,.08),0 12px 30px -12px rgba(60,50,10,.45)}
 button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -121,6 +124,10 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @keyframes wob{50%{transform:translateX(2px)}}
 .whis{position:absolute;pointer-events:none;font-size:13px;color:#8d8668;letter-spacing:.08em;white-space:nowrap;animation:whis 3.6s ease-in-out forwards;z-index:2}
 @keyframes whis{0%{opacity:0;filter:blur(3px)}25%{opacity:.75;filter:none}70%{opacity:.5}100%{opacity:0;filter:blur(2px);transform:translateX(8px)}}
+.scrawl{position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden;transition:opacity 1.1s}
+.scrawl.out{opacity:0}
+.scrawl span{position:absolute;font-family:"Nanum Pen Script",cursive;letter-spacing:0;white-space:nowrap;opacity:0;animation:scr .35s ease-out forwards}
+@keyframes scr{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
 .veil{position:fixed;inset:0;pointer-events:none;z-index:8}
 .veil.flick{background:#14120b;animation:dim 2.4s forwards}
 @keyframes dim{0%{opacity:0}8%{opacity:.55}12%{opacity:.1}20%{opacity:.7}26%{opacity:.25}40%{opacity:.8}70%{opacity:.6}100%{opacity:0}}
@@ -128,7 +135,7 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @keyframes torch{0%{opacity:0}15%,75%{opacity:1}100%{opacity:0}}
 /* 결과 */
 .ov{position:fixed;inset:0;z-index:10;overflow:auto;background:var(--wall) var(--wallimg,none);display:flex;flex-direction:column;align-items:center;padding:0 12px 40px}
-.ov-bar{width:min(calc(100% - 40px),420px);display:flex;gap:6px}
+.ov-bar{width:min(calc(100% - 40px),460px);display:flex;gap:4px}
 .rrow{position:relative}
 .pre .rrow,.pre .stamp{opacity:0}
 .play .rrow{animation:print .55s var(--d) ease-out both}
@@ -201,7 +208,7 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
  </div>
 </div>
 <div id="lo" aria-hidden="true" data-html2canvas-ignore></div>
-<div class="dock" data-html2canvas-ignore><button id="resetAll" aria-label="처음부터 다시하기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg><span>다시하기</span></button><button id="saveMain"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>이미지 저장</button><button class="go" id="openRes">결과 보기</button></div>
+<div class="dock" data-html2canvas-ignore><button id="sndBtn" aria-pressed="true" aria-label="소리 켜고 끄기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="sw-on" d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/><path class="sw-off" d="M17 9.5l5 5M22 9.5l-5 5"/></svg><span>소리</span></button><button id="resetAll" aria-label="처음부터 다시하기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg><span>다시하기</span></button><button id="capMain" aria-label="화면 전체 캡쳐"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>캡쳐</span></button><button id="saveMain" aria-label="일지 이미지 저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg><span>저장</span></button><button class="go" id="openRes">결과 보기</button></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 {
@@ -217,7 +224,7 @@ const LV={
   ['누가 여기 데려왔는지부터 따진 사람',{san:-5,risk:1}],
   ['아무렇지 않게 스트레칭부터 한 사람',{san:10}]]},
  WALK:{code:'Level 0',name:'노란 방을 걷다',narr:'어느 방향으로 걸어도 노란 벽지와 낮은 천장이 이어진다. 방은 조금씩 다르게 생겼지만 묘하게 같은 방이라는 느낌이 든다. 멀리서 형광등 하나가 꺼졌다가, 아무 일 없었다는 듯 다시 켜진다.',items:[
-  ['벽에 화살표를 그리며 걷는 사람',{obs:1}],
+  ['벽에 화살표를 그리며 걷는 사람',{obs:1,fx:'scrawl'}],
   ['같은 방을 세 번 지나쳤다고 확신한 사람',{obs:1,san:-10,fx:'dup'}],
   ['멀리서 들린 “여기야”에 대답한 사람',{risk:2,f:'answered',fx:'whisper',w:'여기야'}],
   ['형광등 소리가 오히려 편안한 사람',{san:10}],
@@ -241,7 +248,7 @@ const LV={
   ['쌓인 상자를 뒤져 보는 사람',{sup:1}],
   ['차가 없는데 시동 소리를 들은 사람',{san:-10,risk:1}],
   ['물웅덩이 속 내 얼굴이 늦게 움직인 사람',{san:-15,f:'mirror',fx:'mirror'}],
-  ['기둥에 적힌 낙서를 믿고 따라간 사람',{obs:1,f:'graffiti'}],
+  ['기둥에 적힌 낙서를 믿고 따라간 사람',{obs:1,f:'graffiti',fx:'scrawl'}],
   ['쉬지 않고 계속 걷는 사람',{risk:1,sup:-1}],
   ['주차 구역 번호를 외우며 걷는 사람',{obs:1}],
   ['불 켜진 경비실 창문을 두드려 본 사람',{risk:1,f:'call'}],
@@ -254,7 +261,7 @@ const LV={
   ['벽 너머 노크 소리를 들은 사람',{san:-10,fx:'whisper',w:'똑. 똑.'}],
   ['노크에 노크로 대답한 사람',{risk:2,f:'answered',fx:'whisper',w:'똑. 똑. 똑.'}],
   ['밸브를 돌려 증기를 멈춘 사람',{obs:1,risk:1}],
-  ['파이프에 적힌 숫자를 받아 적은 사람',{obs:1,f:'graffiti'}],
+  ['파이프에 적힌 숫자를 받아 적은 사람',{obs:1,f:'graffiti',fx:'scrawl'}],
   ['소매로 입을 막고 빠르게 지나간 사람',{san:5}]]},
  HALL:{code:'Level ?',name:'끝없는 복도',narr:'벽도 바닥도 천장도 하얀 복도. 끝이 보이지 않는다. 걸을 때마다 내 발소리 뒤에 발소리가 하나씩 더 붙는다. 멈추면, 뒤의 발소리도 한 박자 늦게 멈춘다.',items:[
   ['절대 뒤를 돌아보지 않는 사람',{san:5,risk:-1}],
@@ -339,8 +346,8 @@ const LV={
 const SIDES={
  GRAFFITI:{trig:['graffiti'],code:'샛길',name:'낙서의 방',narr:'낙서를 따라가자 벽 전체가 글씨로 뒤덮인 작은 방이 나왔다. 서로 다른 필체로 같은 문장이 수백 번 적혀 있다. 맨 아랫줄은 아직 잉크가 마르지 않았다.',items:[
   ['가장 오래된 낙서를 찾아 읽은 사람',{obs:1,f:'clue'}],
-  ['내 필체를 닮은 낙서를 발견한 사람',{san:-10,fx:'erase'}],
-  ['나도 한 줄 적고 나온 사람',{san:5}],
+  ['내 필체를 닮은 낙서를 발견한 사람',{san:-10,fx:'scrawl'}],
+  ['나도 한 줄 적고 나온 사람',{san:5,fx:'scrawl'}],
   ['낙서 속 지도를 베껴 그린 사람',{obs:2,f:'clue'}],
   ['마르지 않은 잉크를 만져 본 사람',{risk:1,san:-5}]]},
  VENDING:{trig:['coin','vending'],code:'샛길',name:'불 켜진 자판기',narr:'모퉁이에 불이 켜진 자판기가 하나 서 있다. 음료에는 상표가 없고, 가격표에는 숫자 대신 점이 찍혀 있다. 동전 투입구에서 미지근한 바람이 나온다.',items:[
@@ -396,6 +403,51 @@ const EVF={
  light:['빛','멀리 보이는 빛은 형광등 색이었다.'],
  knock:['노크','두드린 횟수보다 한 번 더 두드리는 소리가 났다.']
 };
+
+/* 효과음: 파일 없이 Web Audio로 합성 */
+const SND={WAKE:{0:'hum'},WALK:{2:'call',3:'hum',6:'steps',7:'static'},FORK:{2:'steps',3:'coin'},
+ GARAGE:{0:'flick',2:'engine',7:'knock'},PIPE:{1:'drip',4:'knock',5:'knock',6:'steam'},HALL:{6:'steps',8:'call'},
+ MALL:{2:'music',5:'chime',6:'coin'},POOL:{0:'splash',5:'splash',8:'drain'},OFFICE:{1:'ring',7:'copier'},
+ DARK:{2:'call',7:'breath'},HOTEL:{1:'knock',2:'ding',7:'static'},STAIRS:{0:'steps'},DOOR:{1:'wind',3:'knock'},
+ VENDING:{0:'vend',2:'coin'},PHONE:{1:'dial',2:'dtmf',3:'call'}};
+let AC=null,MASTER=null,NB=null,soundOn=true;
+try{soundOn=localStorage.getItem('backrooms-sound')!=='off'}catch(e){}
+function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();MASTER=AC.createGain();MASTER.gain.value=.5;MASTER.connect(AC.destination);
+ NB=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}
+ if(AC.state==='suspended')AC.resume();return AC}
+function g(v,to){const n=AC.createGain();n.gain.value=v;n.connect(to||MASTER);return n}
+function filt(type,f,q,to){const n=AC.createBiquadFilter();n.type=type;n.frequency.value=f;if(q)n.Q.value=q;n.connect(to);return n}
+function noise(t,dur,to){const s=AC.createBufferSource();s.buffer=NB;s.loop=true;s.connect(to);s.start(t);s.stop(t+dur);return s}
+function osc(type,f,t,dur,to){const o=AC.createOscillator();o.type=type;o.frequency.value=f;o.connect(to);o.start(t);o.stop(t+dur);return o}
+function envl(n,t,a,h,r,peak){const p=n.gain;p.setValueAtTime(0,t);p.linearRampToValueAtTime(peak,t+a);p.setValueAtTime(peak,t+a+h);p.exponentialRampToValueAtTime(.0001,t+a+h+r)}
+function thump(t,f,v){const e=g(0);envl(e,t,.005,0,.18,v);const o=osc('sine',f,t,.25,e);o.frequency.exponentialRampToValueAtTime(f*.45,t+.15);const n=g(0);envl(n,t,.002,0,.06,v*.4);noise(t,.1,filt('lowpass',500,0,n))}
+function tone(t,f,dur,v,type){const e=g(0);envl(e,t,.005,0,dur,v);osc(type||'sine',f,t,dur+.05,e)}
+const SFX={
+ hum(t){const e=g(0);envl(e,t,.15,1.6,.4,.09);const lp=filt('lowpass',900,0,e);osc('sawtooth',120,t,2.3,lp);osc('square',240,t,2.3,g(.25,lp))},
+ flick(t){const e=g(0);const lp=filt('lowpass',1100,0,e);osc('sawtooth',120,t,1.8,lp);let x=t;[.09,.0,.09,.0,.07,0,.09,.0].forEach((v,i)=>{e.gain.setValueAtTime(v,x);x+=.08+Math.random()*.2});e.gain.setValueAtTime(0,x)},
+ call(t){const out=g(1),dl=AC.createDelay();dl.delayTime.value=.38;const fb=g(.38,dl);dl.connect(fb);dl.connect(filt('lowpass',900,0,out));
+  [[0,.3],[.42,.45]].forEach(([o,d])=>{const e=g(0,out);e.connect(dl);envl(e,t+o,.06,d-.12,.12,.22);const b=filt('bandpass',650,4,e);noise(t+o,d+.1,b);noise(t+o,d+.1,filt('bandpass',1150,6,e))})},
+ static(t){const e=g(0);envl(e,t,.05,1.2,.3,.06);noise(t,1.6,filt('highpass',2200,0,e));for(let i=0;i<10;i++){const c=g(0);envl(c,t+Math.random()*1.4,.001,0,.02,.18);noise(t,1.6,filt('bandpass',3000,1,c))}},
+ steps(t){[0,.48,.96,1.44,1.62].forEach((o,i)=>thump(t+o,95,i===4?.35:.5))},
+ coin(t){tone(t,2600,.25,.12);tone(t+.06,3400,.35,.09);tone(t+.22,2900,.3,.07)},
+ engine(t){const e=g(0);e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(.22,t+.5);e.gain.setValueAtTime(.22,t+1.4);e.gain.exponentialRampToValueAtTime(.0001,t+2.6);const lp=filt('lowpass',280,0,e);const o=osc('sawtooth',36,t,2.7,lp);o.frequency.linearRampToValueAtTime(52,t+.6);o.frequency.linearRampToValueAtTime(40,t+2.4);osc('square',72,t,2.7,g(.3,lp));noise(t,2.7,filt('lowpass',200,0,g(.5,e)))},
+ drip(t){[0,.7,1.25].forEach(o=>{const e=g(0);envl(e,t+o,.002,0,.15,.25);const s=osc('sine',1900,t+o,.2,e);s.frequency.exponentialRampToValueAtTime(520,t+o+.09)})},
+ knock(t){[0,.26,.52].forEach(o=>{const e=g(0);envl(e,t+o,.002,0,.09,.6);noise(t+o,.12,filt('bandpass',260,1.2,e));tone(t+o,150,.1,.3)})},
+ steam(t){const e=g(0);envl(e,t,.08,1.1,.6,.13);noise(t,1.9,filt('highpass',1600,0,e))},
+ music(t){const n=[659,784,880,784,659,587,523];let x=t,r=1;n.forEach((f,i)=>{tone(x,f*r,.9,.07,'triangle');tone(x,f*r*2.01,.5,.02);x+=.32+i*.07;r*=.985})},
+ chime(t){[[880,0],[698,.55]].forEach(([f,o])=>{tone(t+o,f,1.3,.12);tone(t+o,f*2,.8,.03);tone(t+o,f*3,.5,.015)})},
+ splash(t){const e=g(0);envl(e,t,.01,.05,.6,.35);const lp=filt('lowpass',3200,0,e);lp.frequency.exponentialRampToValueAtTime(380,t+.6);noise(t,.8,lp);for(let i=0;i<6;i++){const o=t+.15+Math.random()*.6,e2=g(0);envl(e2,o,.003,0,.06,.05);const s=osc('sine',500+Math.random()*700,o,.08,e2);s.frequency.exponentialRampToValueAtTime(1400,o+.06)}},
+ drain(t){const e=g(0);envl(e,t,.2,1.4,.5,.2);const bp=filt('bandpass',400,5,e);const l=osc('sine',6,t,2.2,g(250,bp.frequency));noise(t,2.2,bp)},
+ ring(t){[0,1.6].forEach(o=>{const e=g(0);envl(e,t+o,.01,1,.05,.09);const am=g(0,e);osc('square',20,t+o,1.1,g(.5,am.gain));am.gain.value=.5;osc('sine',440,t+o,1.1,am);osc('sine',480,t+o,1.1,am)})},
+ copier(t){const e=g(0);envl(e,t,.1,1.3,.3,.1);const lp=filt('lowpass',700,0,e);osc('sawtooth',110,t,1.8,lp);noise(t,1.8,filt('bandpass',1800,2,g(.4,e)));const am=g(.5,e.gain);osc('sine',6,t,1.8,am)},
+ breath(t){[0,1.5].forEach(o=>{const e=g(0);e.gain.setValueAtTime(0,t+o);e.gain.linearRampToValueAtTime(.1,t+o+.7);e.gain.linearRampToValueAtTime(0,t+o+1.4);noise(t+o,1.5,filt('bandpass',850,.8,e))})},
+ ding(t){tone(t,1318,1.6,.13);tone(t,2637,.9,.03)},
+ wind(t){const e=g(0);envl(e,t,.6,1.2,.9,.2);const bp=filt('bandpass',500,1.5,e);osc('sine',.6,t,2.8,g(350,bp.frequency));noise(t,2.8,bp)},
+ vend(t){thump(t,70,.6);tone(t+.25,180,.15,.08,'square')},
+ dial(t){[[697,1209],[770,1336],[852,1477],[941,1336]].forEach(([a,b],i)=>{tone(t+i*.2,a,.12,.07);tone(t+i*.2,b,.12,.07)});SFX.ring(t+1.1)},
+ dtmf(t){[0,.25,.5].forEach(o=>{tone(t+o,941,.14,.08);tone(t+o,1336,.14,.08)})}
+};
+function playSnd(lv,k){if(!soundOn||reduce())return;const key=SND[lv]&&SND[lv][k];if(!key)return;try{if(!ac())return;SFX[key](AC.currentTime+.02)}catch(e){}}
 
 const ALL={...LV,...SIDES};
 const COLORS=['#C9A21B','#4E7A74','#B5574B','#5B6EA8'],ADV=2,KEY='backrooms-log-v4';
@@ -495,14 +547,27 @@ function renderBody(){const tr=st.chars.map(c=>trace(c.id)),total=STAGES.length,
  <div class="row2 kv"><span>체크 합계</span><span>${P.map(({c,i})=>esc(nameOf(c,i))+' '+stats(c.id,tr[i].path).n).join(' · ')}</span></div>
  ${fresh.size===1?'<p class="hint">각자 두 개 이상 체크하면 아래로 다음 구역이 이어집니다.</p>':''}`;
  $('body').innerHTML=html;
- const dark=P.some(o=>!tr[o.i].done&&tr[o.i].path[tr[o.i].path.length-1]==='DARK');$('lo').classList.toggle('on',dark);document.documentElement.classList.toggle('lo-on',dark);
+ watchDark();
  document.querySelectorAll('.ck').forEach(b=>b.onclick=()=>toggle(b.dataset.c,b.dataset.lv,+b.dataset.k));
  $('openRes').innerHTML=wait.length?`결과 보기 <small>${wait.length}명 탐사 중</small>`:'결과 보기'}
 
+/* 화면 가득 낙서: 하나씩 적히다가 몇 초 뒤 사라진다 */
+function scrawl(btn){const c=st.chars.find(x=>x.id===btn.dataset.c),who=c?nameOf(c,st.chars.indexOf(c)):'누군가';
+ const W=['여기야','나가지 마','출구 없음','돌아가','또 왔네','같은 방','→','→ →','봤어?','세지 마','正正正','다 똑같아','위로','아래로','${who} 여기 있었음','${who}?','숨 참아','불 끄지 마','여기 아니야','나도 그랬어'];
+ const o=document.createElement('div');o.className='scrawl';o.setAttribute('aria-hidden','true');o.setAttribute('data-html2canvas-ignore','');
+ const n=Math.min(42,Math.round(innerWidth*innerHeight/16000));let h='';
+ for(let i=0;i<n;i++){const t=W[Math.floor(Math.random()*W.length)].replace('${who}',who),sz=20+Math.random()*44,red=Math.random()<.22;
+  h+=`<span style="left:${(Math.random()*92-4).toFixed(1)}%;top:${(Math.random()*94-2).toFixed(1)}%;font-size:${sz.toFixed(0)}px;transform:rotate(${(Math.random()*36-18).toFixed(1)}deg);color:${red?'rgba(150,40,30,.78)':'rgba(30,28,22,.72)'};animation-delay:${(i*55).toFixed(0)}ms">${esc(t)}</span>`}
+ o.innerHTML=h;document.body.appendChild(o);setTimeout(()=>o.classList.add('out'),3300);setTimeout(()=>o.remove(),4500)}
+/* 불 꺼진 층이 화면 가운데에 걸려 있을 때만 소등 */
+let darkObs=null;
+function setDark(on){$('lo').classList.toggle('on',on);document.documentElement.classList.toggle('lo-on',on)}
+function watchDark(){if(darkObs)darkObs.disconnect();const sec=document.querySelector('section[data-lv=DARK]');if(!sec||!('IntersectionObserver' in window)){setDark(false);return}
+ darkObs=new IntersectionObserver(es=>es.forEach(e=>setDark(e.isIntersecting)),{rootMargin:'-42% 0px -42% 0px'});darkObs.observe(sec)}
 function toggle(cid,lv,k){const m=st.checks[cid]||(st.checks[cid]={}),a=m[lv]||(m[lv]=[]),j=a.indexOf(k),on=j<0;if(on)a.push(k);else a.splice(j,1);
  save();const y=window.scrollY;renderBody();window.scrollTo(0,y);
  const b=document.querySelector(`.ck[data-c="${cid}"][data-lv="${lv}"][data-k="${k}"]`);if(b)b.focus({preventScroll:true});
- const e=ALL[lv].items[k][1];if(on&&e.fx&&b)fx(e.fx,b,e.w)}
+ const e=ALL[lv].items[k][1];if(on){playSnd(lv,k);if(e.fx&&b)fx(e.fx,b,e.w)}}
 function photo(i,file){if(!file||!/^image\//.test(file.type))return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),S=240,m=Math.min(im.width,im.height);c.width=c.height=S;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);st.chars[i].photo=c.toDataURL('image/jpeg',.85);save();renderAll()};im.src=r.result};r.readAsDataURL(file)}
 function renderAll(){renderCrew();renderBody()}
 
@@ -520,6 +585,7 @@ function fx(kind,btn,w){if(reduce()||busy[kind])return;busy[kind]=1;const done=m
  else if(kind==='mirror'||kind==='blur'){sec.classList.add('fx-'+kind);setTimeout(()=>sec.classList.remove('fx-'+kind),2700);done(2800)}
  else if(kind==='flicker'){const v=document.createElement('div');v.className='veil flick';document.body.appendChild(v);setTimeout(()=>v.remove(),2500);done(2500)}
  else if(kind==='dark'){const r=btn.getBoundingClientRect(),v=document.createElement('div');v.className='veil torch';v.style.background=`radial-gradient(circle at ${r.left+r.width/2}px ${r.top+r.height/2}px, transparent 0, transparent 70px, rgba(15,13,8,.94) 150px)`;document.body.appendChild(v);setTimeout(()=>v.remove(),3300);done(3300)}
+ else if(kind==='scrawl'){scrawl(btn);done(4600)}
  else if(kind==='name'){const ins=[...document.querySelectorAll('.nm')];if(ins.some(x=>x===document.activeElement)){busy[kind]=0;return}
   const vals=ins.map(x=>x.value),shown=ins.map((x,i)=>x.value||x.placeholder);ins.forEach((x,i)=>{x.classList.add('haunt');x.value=ins.length>1?shown[(i+1)%ins.length]:'???';x.readOnly=true});
   setTimeout(()=>ins.forEach((x,i)=>{x.value=vals[i];x.classList.remove('haunt');x.readOnly=false}),3000);done(3000)}}
@@ -557,7 +623,7 @@ function scriptTitles(root){root.querySelectorAll('.res-t[data-key]').forEach(t=
  if(k==='loop'){setTimeout(()=>{let s=full,del=true;const it=setInterval(()=>{if(del){s=s.slice(0,-1);if(s.length<=3)del=false}else{s=full.slice(0,s.length+1);if(s===full)clearInterval(it)}t.textContent=s},90)},d+full.length*50+800)}
  if(k==='knock')setTimeout(()=>{row.classList.add('play-t')},0)})}
 function openResult(){const o=outcome(),ov=document.createElement('div');ov.className='ov';ov.setAttribute('role','dialog');ov.setAttribute('aria-label','탐사 결과');
- ov.innerHTML=`<div class="wrap pre" id="resSheet">${resultHTML(o)}</div><div class="ov-bar" data-html2canvas-ignore><button id="backRes">← 일지로</button><button class="go" id="saveRes">이미지 저장</button></div>`;
+ ov.innerHTML=`<div class="wrap pre" id="resSheet">${resultHTML(o)}</div><div class="ov-bar" data-html2canvas-ignore><button id="backRes">← 일지로</button><button id="capRes" aria-label="화면 전체 캡쳐"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>캡쳐</span></button><button class="go" id="saveRes">이미지 저장</button></div>`;
  document.body.appendChild(ov);document.body.style.overflow='hidden';
  const sheet=$('resSheet');const play=()=>{sheet.classList.remove('pre');sheet.classList.add('play');scriptTitles(sheet)};
  if(o.kind!=='wait'&&!reduce()){const it=document.createElement('div');it.className='intro s-'+o.kind;it.setAttribute('aria-hidden','true');
@@ -566,7 +632,7 @@ function openResult(){const o=outcome(),ov=document.createElement('div');ov.clas
  else play();
  const close=()=>{ov.remove();document.body.style.overflow='';$('openRes').focus()};
  $('backRes').onclick=close;ov.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
- $('saveRes').onclick=e=>shootFull(e.currentTarget,ov,'정산서');$('saveRes').focus({preventScroll:true})}
+ $('saveRes').onclick=e=>shoot(sheet,e.currentTarget,'정산서');$('capRes').onclick=e=>shootFull(e.currentTarget,ov,'정산서_화면');$('saveRes').focus({preventScroll:true})}
 
 /* 화면 전경 캡쳐: 버튼 바·연출 레이어는 빼고 지금 보이는 너비 그대로 페이지 전체를 찍는다 */
 async function shootFull(btn,ov,label){const old=btn.innerHTML;btn.disabled=true;btn.textContent='저장 중…';
@@ -581,6 +647,13 @@ async function shootFull(btn,ov,label){const old=btn.innerHTML;btn.disabled=true
   const fname=`백룸_${label}_${st.chars.map((c,i)=>nameOf(c,i)).join('_').replace(/[\\/:*?"<>|\s]/g,'')}.png`;
   const blob=await new Promise(r=>cv.toBlob(r,'image/png'));await deliver(blob,fname,cv)}catch(err){toast('이미지를 만들지 못했어요')}
  btn.disabled=false;btn.innerHTML=old}
+/* 일지·정산서 종이만 저장 */
+async function shoot(el,btn,label){const old=btn.innerHTML;btn.disabled=true;btn.textContent='저장 중…';
+ try{await document.fonts.ready;const cv=await html2canvas(el,{scale:2,backgroundColor:'#d6c98c',logging:false,windowWidth:760,
+   onclone:d=>{d.documentElement.classList.add('cap');d.querySelectorAll('.new').forEach(x=>x.classList.remove('new'));d.querySelectorAll('.fx-mirror,.fx-blur').forEach(x=>x.classList.remove('fx-mirror','fx-blur'));d.querySelectorAll('.res-t[data-full]').forEach(t=>{if(t.dataset.full)t.textContent=t.dataset.full})}});
+  const fname=`백룸_${label}_${st.chars.map((c,i)=>nameOf(c,i)).join('_').replace(/[\\/:*?"<>|\s]/g,'')}.png`;
+  const blob=await new Promise(r=>cv.toBlob(r,'image/png'));await deliver(blob,fname,cv)}catch(err){toast('이미지를 만들지 못했어요')}
+ btn.disabled=false;btn.innerHTML=old}
 /* 바로 다운로드: Claude 안에서는 저장 기능으로, 파일로 열었을 땐 브라우저 다운로드로. 둘 다 막히면 이미지 창을 띄운다 */
 async function deliver(blob,fname,cv){
  if(dl){try{await dl.save({filename:fname,data:blob});toast('저장했어요');return}catch(err){const c=err&&err.code;if(c==='declined'){toast('저장을 취소했어요');return}if(c==='rate_limited'){toast('잠시 후 다시 눌러 주세요');return}}}
@@ -591,12 +664,15 @@ function toast(t){const d=document.createElement('div');d.className='toast';d.se
 
 try{const c=document.createElement('canvas');c.width=44;c.height=8;const g=c.getContext('2d');g.fillStyle='#d6c98c';g.fillRect(0,0,44,8);g.fillStyle='rgba(120,100,30,.07)';g.fillRect(0,0,2,8);g.fillStyle='rgba(120,100,30,.05)';g.fillRect(22,0,1,8);
  const u=`url(${c.toDataURL()})`;document.body.style.backgroundImage=u;document.documentElement.style.setProperty('--wallimg',u)}catch(e){}
+{const sb=$('sndBtn'),paint=()=>{sb.setAttribute('aria-pressed',soundOn);sb.querySelector('span').textContent='소리'};paint();
+ sb.onclick=()=>{soundOn=!soundOn;try{localStorage.setItem('backrooms-sound',soundOn?'on':'off')}catch(e){}paint();toast(soundOn?'소리를 켰어요':'소리를 껐어요');if(soundOn){try{ac();tone(AC.currentTime+.02,880,.15,.06)}catch(e){}}}}
 $('openRes').onclick=openResult;
 {const r=$('resetAll'),lab=r.querySelector('span');let armed=0,tm;
  r.onclick=()=>{if(!Object.keys(st.checks).length){toast('아직 체크한 항목이 없어요');return}
   if(!armed){armed=1;lab.textContent='정말 지울까요?';r.classList.add('warn');tm=setTimeout(()=>{armed=0;lab.textContent='다시하기';r.classList.remove('warn')},3000);return}
   clearTimeout(tm);armed=0;lab.textContent='다시하기';r.classList.remove('warn');st.checks={};save();seen=new Set();renderBody();window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'});toast('처음부터 다시 시작해요. 탐험자는 그대로예요')}}
-$('saveMain').onclick=e=>shootFull(e.currentTarget,null,'일지');
+$('saveMain').onclick=e=>shoot($('sheet'),e.currentTarget,'일지');
+$('capMain').onclick=e=>shootFull(e.currentTarget,null,'화면');
 renderAll();
 if(window.claude&&claude.use)claude.use('downloads').then(d=>{dl=d}).catch(()=>{});
 }
