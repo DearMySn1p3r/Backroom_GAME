@@ -68,6 +68,30 @@ section{transition:transform .6s,filter .6s}
 .ck::before{content:"";width:16px;height:16px;border-radius:4px;border:1.5px solid #cbc3a2;transition:background .12s,border-color .12s}
 .ck[aria-pressed=true]::before{background:var(--c);border-color:var(--c)}
 .ck:focus-visible{outline:2px solid var(--ink);outline-offset:-6px;border-radius:6px}
+.here{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px 0 8px;border-radius:99px;font-size:12.5px;font-weight:500;background:var(--tint);color:#5d5946}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip.now{background:var(--c);color:#fff}
+.chip.now i{background:#fff;opacity:.85}
+.chip small{font-size:11px;font-weight:400;opacity:.85}
+.colh{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+.colh span{flex:1}
+.colh b{width:30px;text-align:center;font-size:10.5px;font-weight:700;color:var(--c);white-space:nowrap;overflow:hidden;letter-spacing:-.04em}
+/* 불 꺼진 층: 구역 자체는 어둡게, 누군가 그 층에 있는 동안은 화면 전체 소등 */
+section[data-lv=DARK]{position:relative;z-index:6;background:#14130f;color:#dcd6c0;margin:0 calc(-1 * clamp(20px,6vw,42px));padding:2px clamp(20px,6vw,42px) 20px;transition:background 1.2s}
+section[data-lv=DARK] .cut{border-color:#14130f}
+section[data-lv=DARK] .narr{color:#8a846e}
+section[data-lv=DARK] .code{color:#7d7762}
+section[data-lv=DARK] .lead{border-color:#3a372c}
+section[data-lv=DARK] .ck::before{border-color:#5a5542}
+section[data-lv=DARK] .ck:focus-visible{outline-color:#dcd6c0}
+section[data-lv=DARK] .chip{background:#26241c;color:#bdb69c}
+section[data-lv=DARK] .chip.now{background:var(--c);color:#fff}
+section[data-lv=DARK] .need{color:#8a846e}
+#lo{position:fixed;inset:0;background:#0b0a07;opacity:0;pointer-events:none;z-index:4;transition:opacity 1.4s ease}
+#lo.on{opacity:.72}
+.tube{transition:opacity 1.2s}
+.lo-on .stage .tube{opacity:.08;animation:none}
 .need{font-size:12px;color:var(--soft);text-align:right;margin-top:6px}
 .ev{margin:18px 0 0;padding:14px 16px;background:var(--tint);border-radius:6px}
 .ev+.ev{margin-top:8px}
@@ -174,6 +198,7 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   </div>
  </div>
 </div>
+<div id="lo" aria-hidden="true" data-html2canvas-ignore></div>
 <div class="dock" data-html2canvas-ignore><button id="saveMain"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>이미지 저장</button><button class="go" id="openRes">결과 보기</button></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
@@ -433,6 +458,8 @@ function zoneHTML(lv,here,tr){const L=ALL[lv],isSide=!!SIDES[lv],isNew=seen.size
  const waiting=here.filter(o=>!isSide&&!tr[o.i].done&&tr[o.i].path[tr[o.i].path.length-1]===lv);
  return`<section class="${isNew?'new':''}" data-lv="${lv}"><div class="cut"></div><div class="sec-h"><b>${L.name}</b><span class="code ${isSide?'side':''}">${L.code}${isSide?' · 선택':''}</span></div>
  <p class="narr">${L.narr}</p>
+ <div class="here">${here.map(o=>{const t=tr[o.i],now=!isSide&&!t.done&&t.path[t.path.length-1]===lv;return`<span class="chip${now?' now':''}" style="--c:${okC(o.c.color)}"><i></i>${esc(nameOf(o.c,o.i))}</span>`}).join('')}</div>
+ <div class="colh" aria-hidden="true"><span></span>${here.map(o=>`<b style="--c:${okC(o.c.color)}">${esc([...nameOf(o.c,o.i)].slice(0,2).join(''))}</b>`).join('')}</div>
  ${L.items.map((it,k)=>`<div class="it"><span class="tx">${it[0]}</span><i class="lead"></i>${here.map(({c,i})=>`<button class="ck" style="--c:${okC(c.color)}" data-c="${c.id}" data-lv="${lv}" data-k="${k}" aria-pressed="${ck(c.id,lv).includes(k)}" aria-label="${esc(nameOf(c,i))}: ${esc(it[0])}"></button>`).join('')}</div>`).join('')}
  ${waiting.length?`<div class="need">${waiting.map(o=>`<span class="who"><i style="--c:${okC(o.c.color)}"></i></span> ${esc(nameOf(o.c,o.i))} ${tr[o.i].need}개 더`).join(' &nbsp; ')}</div>`:''}
  ${isSide?'<div class="need">샛길은 체크하지 않아도 계속 진행돼요</div>':''}</section>`}
@@ -466,6 +493,7 @@ function renderBody(){const tr=st.chars.map(c=>trace(c.id)),total=STAGES.length,
  <div class="row2 kv"><span>체크 합계</span><span>${P.map(({c,i})=>esc(nameOf(c,i))+' '+stats(c.id,tr[i].path).n).join(' · ')}</span></div>
  ${fresh.size===1?'<p class="hint">각자 두 개 이상 체크하면 아래로 다음 구역이 이어집니다.</p>':''}`;
  $('body').innerHTML=html;
+ const dark=P.some(o=>!tr[o.i].done&&tr[o.i].path[tr[o.i].path.length-1]==='DARK');$('lo').classList.toggle('on',dark);document.documentElement.classList.toggle('lo-on',dark);
  document.querySelectorAll('.ck').forEach(b=>b.onclick=()=>toggle(b.dataset.c,b.dataset.lv,+b.dataset.k));
  $('openRes').innerHTML=wait.length?`결과 보기 <small>${wait.length}명 탐사 중</small>`:'결과 보기'}
 
