@@ -692,9 +692,10 @@ try{const c=document.createElement('canvas');c.width=44;c.height=8;const g=c.get
  sb.onclick=()=>{soundOn=!soundOn;try{localStorage.setItem('backrooms-sound',soundOn?'on':'off')}catch(e){}paint();toast(soundOn?'소리를 켰어요':'소리를 껐어요');if(soundOn){try{ac();tone(AC.currentTime+.02,880,.15,.06)}catch(e){}}}}
 $('openRes').onclick=openResult;
 {const r=$('resetAll'),lab=r.querySelector('span');let armed=0,tm;
- r.onclick=()=>{if(!Object.keys(st.checks).length){toast('아직 체크한 항목이 없어요');return}
+ const blank=()=>!Object.keys(st.checks).length&&st.chars.length===2&&st.chars.every((c,i)=>!c.name.trim()&&!c.photo&&c.color===COLORS[i]);
+ r.onclick=()=>{if(blank()){toast('이미 처음 상태예요');return}
   if(!armed){armed=1;lab.textContent='정말 지울까요?';r.classList.add('warn');tm=setTimeout(()=>{armed=0;lab.textContent='다시하기';r.classList.remove('warn')},3000);return}
-  clearTimeout(tm);armed=0;lab.textContent='다시하기';r.classList.remove('warn');st.checks={};save();seen=new Set();renderBody();window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'});toast('처음부터 다시 시작해요. 탐험자는 그대로예요')}}
+  clearTimeout(tm);armed=0;lab.textContent='다시하기';r.classList.remove('warn');st={chars:[mk(COLORS[0]),mk(COLORS[1])],checks:{}};save();seen=new Set();renderAll();window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'});toast('탐험자와 체크를 모두 지우고 처음부터 시작해요')}}
 $('saveMain').onclick=e=>shoot($('sheet'),e.currentTarget,'일지');
 $('capMain').onclick=e=>shootFull(e.currentTarget,null,'화면');
 renderAll();
