@@ -143,8 +143,9 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .res-who>span{display:flex;align-items:center;gap:10px;font-weight:700}
 .res-who img,.res-who .noimg{width:38px;height:38px;border-radius:6px;object-fit:cover;background:var(--tint);flex:none}
 .res-who em{font-style:normal;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:99px;border:1.5px solid currentColor}
-.meter{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;background:var(--tint);border-radius:8px;font-size:12px}
-.meter b{font-size:13px;font-weight:700;min-width:1.6em;color:var(--ink);position:relative;top:2px}
+.meter{display:flex;align-items:center;gap:8px;margin-top:12px;padding:9px 12px;background:var(--tint);border-radius:8px;font-size:12.5px;line-height:16px}
+.meter b,.meter .ml{display:block;height:16px;line-height:16px;font-size:12.5px}
+.meter b{font-weight:700;min-width:1.6em;color:var(--ink)}
 .meter .mb{flex:1;max-width:160px;height:5px;border-radius:3px;background:#e3dbb8;overflow:hidden}
 .meter .mb i{display:block;height:100%;background:var(--c);border-radius:3px}
 .ml{color:var(--soft);white-space:nowrap}
@@ -173,8 +174,9 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @keyframes smear{from{opacity:0;transform:scaleX(2.4);filter:blur(3px);color:#c9b866}}
 @keyframes walk{0%{opacity:0}35%{opacity:1;transform:none}65%{opacity:.4;transform:translateX(12px)}100%{opacity:1;transform:none}}
 @keyframes knock{0%,30%,60%,100%{transform:none}8%,38%,68%{transform:translateX(-3px)}16%,46%,76%{transform:translateX(3px)}}
-.e-knock.play-t .meter{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;background:var(--tint);border-radius:8px;font-size:12px}
-.meter b{font-size:13px;font-weight:700;min-width:1.6em;color:var(--ink);position:relative;top:2px}
+.e-knock.play-t .meter{display:flex;align-items:center;gap:8px;margin-top:12px;padding:9px 12px;background:var(--tint);border-radius:8px;font-size:12.5px;line-height:16px}
+.meter b,.meter .ml{display:block;height:16px;line-height:16px;font-size:12.5px}
+.meter b{font-weight:700;min-width:1.6em;color:var(--ink)}
 .meter .mb{flex:1;max-width:160px;height:5px;border-radius:3px;background:#e3dbb8;overflow:hidden}
 .meter .mb i{display:block;height:100%;background:var(--c);border-radius:3px}
 .ml{color:var(--soft);white-space:nowrap}
@@ -658,7 +660,7 @@ async function shootFull(btn,ov,label){const old=btn.innerHTML;btn.disabled=true
  try{await document.fonts.ready;const W=document.documentElement.clientWidth;
   const H=ov?Math.max(ov.scrollHeight,innerHeight):Math.max(document.documentElement.scrollHeight,innerHeight);
   const scale=Math.max(1,Math.min(2,16000/H,Math.sqrt(30e6/(W*H))));
-  const cv=await html2canvas(document.body,{scale,backgroundColor:'#d6c98c',logging:false,windowWidth:W,width:W,height:H,x:0,y:0,scrollX:0,scrollY:0,
+  const cv=await h2c(document.body,{scale,backgroundColor:'#d6c98c',logging:false,windowWidth:W,width:W,height:H,x:0,y:0,scrollX:0,scrollY:0,
    ignoreElements:el=>el.classList&&(el.classList.contains('veil')||el.classList.contains('toast')||el.classList.contains('modal')||el.classList.contains('intro')),
    onclone:d=>{d.documentElement.classList.add('shot');d.querySelectorAll('.new').forEach(s=>s.classList.remove('new'));d.querySelectorAll('.fx-mirror,.fx-blur').forEach(s=>s.classList.remove('fx-mirror','fx-blur'));
     d.querySelectorAll('.res-t[data-full]').forEach(t=>{if(t.dataset.full)t.textContent=t.dataset.full});
@@ -666,9 +668,12 @@ async function shootFull(btn,ov,label){const old=btn.innerHTML;btn.disabled=true
   const fname=`백룸_${label}_${st.chars.map((c,i)=>nameOf(c,i)).join('_').replace(/[\\/:*?"<>|\s]/g,'')}.png`;
   const blob=await new Promise(r=>cv.toBlob(r,'image/png'));await deliver(blob,fname,cv)}catch(err){toast('이미지를 만들지 못했어요')}
  btn.disabled=false;btn.innerHTML=old}
+/* html2canvas는 글자 기준선을 1px 아래로 잡는다(측정 공식의 +2 오차). 저장하는 동안만 1px 올려 그린다 */
+function h2c(el,opt){const P=CanvasRenderingContext2D.prototype,o=P.fillText;P.fillText=function(t,x,y,...r){return o.call(this,t,x,y-1,...r)};
+ return html2canvas(el,opt).finally(()=>{P.fillText=o})}
 /* 일지·정산서 종이만 저장 */
 async function shoot(el,btn,label){const old=btn.innerHTML;btn.disabled=true;btn.textContent='저장 중…';
- try{await document.fonts.ready;const cv=await html2canvas(el,{scale:2,backgroundColor:'#d6c98c',logging:false,windowWidth:760,
+ try{await document.fonts.ready;const cv=await h2c(el,{scale:2,backgroundColor:'#d6c98c',logging:false,windowWidth:760,
    onclone:d=>{d.documentElement.classList.add('cap');d.querySelectorAll('.new').forEach(x=>x.classList.remove('new'));d.querySelectorAll('.fx-mirror,.fx-blur').forEach(x=>x.classList.remove('fx-mirror','fx-blur'));d.querySelectorAll('.res-t[data-full]').forEach(t=>{if(t.dataset.full)t.textContent=t.dataset.full})}});
   const fname=`백룸_${label}_${st.chars.map((c,i)=>nameOf(c,i)).join('_').replace(/[\\/:*?"<>|\s]/g,'')}.png`;
   const blob=await new Promise(r=>cv.toBlob(r,'image/png'));await deliver(blob,fname,cv)}catch(err){toast('이미지를 만들지 못했어요')}
